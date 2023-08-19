@@ -1,4 +1,4 @@
-# Multiple Choice Question-Answering in a k-shot Setting with GPT-2 Variants.
+# Multiple Choice Question-Answering in a k-shot Setting with GPT-2 Variants
 
 ## 1. Background:
 
@@ -43,7 +43,9 @@ Answer:
 
 ![alt text](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/blog/evaluating-mmlu-leaderboard/LLM-05.png)
 
-#### **1.3.2. Second approach.** The model is expected to generate as text the correct letter answer.
+#### **1.3.2. Second approach.** The model is expected to generate as next token the correct letter answer.
+
+In this approach, if the "Zygote" token was instead the highest probability one (as we’ve seen above), the model answer ("Zygote") would be wrong and the model would not score any points for this question.
 
 ![alt text](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/blog/evaluating-mmlu-leaderboard/LLM-06.png)
 
@@ -51,7 +53,7 @@ Answer:
 
 ### 2.1. The Data
 
-Your dataset (under ```/data```) consists of several CSV files, each pertaining to a different topic. Each CSV file contains multiple choice questions, their options, and the correct answer.
+Your dataset (under ```data/```) consists of several CSV files, each pertaining to a different topic. Each CSV file contains multiple choice questions, their options, and the correct answer.
 
 ### 2.2. The Models
 
@@ -80,9 +82,11 @@ model_large = GPT2LMHeadModel.from_pretrained(MODEL_NAME_LARGE)
 
 Extract questions, options, and answers from the dataset and structure them according to the k-shot setting.
 
-For each CSV in ```/data```: 
-- The first K rows + filename should be used to build the prompt
-- The remaining rows should be used to evaluate the model's performance. 
+For each CSV in ```data/```: 
+- The first K rows + filename (as topic) should be used to build the prompt
+- The next N* rows should be used to evaluate the model's performance. 
+
+\* N will be chosen based on your compute resources. 
 
 Prime the model with the first k questions and their answers, then ask the subsequent target question.
 
@@ -129,8 +133,14 @@ If the k-shot prompt is too long token-wise (let's say it's 1024 from now on), t
 
 #### **3.2. Analysis**
 
-Explore and comment on:
-   - The two model's performance (accuracy-wise) variability across different topics (and also as a whole) and evaluation methods as described in 1.3. 
-   - The impact of changing the value of k on model performance.
+Evaluate the two GPT-2 variants' performance across different topics using the described k-shot setting. Dive into:
+- Performance variablity across topics.
+- Performance variablity across models. 
+- Impact of varying k on performance. Use k=[1, 3, 5].
+- Performance comparison between between the two evaluation methods described in 1.3. 
 
-Happy Coding!
+## 4. Parting Notes
+
+By this point, you've probably noticed there's a bunch of experiments to run through. Keeping your code organized will make your life a whole lot easier. 😉
+
+Good luck! 
