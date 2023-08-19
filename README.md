@@ -89,20 +89,38 @@ Prime the model with the first k questions and their answers, then ask the subse
 Below is a sample function for getting the model's output logits (given a prompt)
 
 ```python
-def get_logits(model, tokenizer, prompt):
-    
-    # Tokenizing the prompt
-    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024)
+from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
-    # Getting model's output
+def compute_logits(prompt, model, tokenizer):
+    """
+    Given a prompt, model, and tokenizer, this function computes the logits for the next token(s).
+    
+    Parameters:
+    - prompt (str): The input prompt for the model.
+    - model (GPT2LMHeadModel): An instance of GPT-2 model.
+    - tokenizer (GPT2Tokenizer): The tokenizer corresponding to the model.
+
+    Returns:
+    - torch.Tensor: The logits predicted by the model for the next token(s).
+    """
+    # Tokenize the input prompt
+    input_ids = tokenizer.encode(prompt, return_tensors='pt')
+
+    # Get model's prediction
     with torch.no_grad():
-        outputs = model(**inputs)
-    
-    # Extract logits corresponding to the position of the options in the prompt
-    # Assuming the last token's logits correspond to the model's selection among options
-    logits = outputs.logits[0][-1]
+        outputs = model(input_ids)
+    logits = outputs.logits[:, -1, :]  # We take the logits corresponding to the last token in the prompt
 
-    return logits 
+    return logits
+
+# Example usage:
+
+# MODEL_NAME = "gpt2-medium"  # Can be "gpt2" for the smaller version
+# tokenizer = GPT2Tokenizer.from_pretrained(MODEL_NAME)
+# model = GPT2LMHeadModel.from_pretrained(MODEL_NAME)
+
+# prompt = "Your prompt goes here."
+# logits = compute_logits(prompt, model, tokenizer)
 ```
 
 As part of the task, **you will have to ensure to manage the token limits of the model, especially when constructing long prompts with larger k values.** 
