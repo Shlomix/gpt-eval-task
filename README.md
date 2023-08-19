@@ -41,13 +41,15 @@ Answer:
 
 #### **1.3.1. First approach.** compare the probabilities of the letter answers: A, B, C, D. 
 
-![alt text](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/blog/evaluating-mmlu-leaderboard/LLM-05.png)
+![alt text](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/blog/evaluating-mmlu-leaderboard/LLM-05.png) 
+source: https://huggingface.co/blog/evaluating-mmlu-leaderboard
 
 #### **1.3.2. Second approach.** The model is expected to generate as next token the correct letter answer.
 
 In this approach, if the "Zygote" token was instead the highest probability one (as we’ve seen above), the model answer ("Zygote") would be wrong and the model would not score any points for this question.
 
 ![alt text](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/blog/evaluating-mmlu-leaderboard/LLM-06.png)
+source: https://huggingface.co/blog/evaluating-mmlu-leaderboard
 
 ## 2. Setup
 
@@ -137,7 +139,7 @@ Evaluate the two GPT-2 variants' performance across different topics using the d
 - Performance variablity across topics.
 - Performance variablity across models. 
 - Impact of varying k on performance. Use k=[1, 3, 5].
-- Performance comparison between between the two evaluation methods described in 1.3. 
+- Performance comparison between the two evaluation methods described in 1.3. 
 
 ## 4. Parting Notes
 
